@@ -19,6 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors();
+
 // настройка аутентификации
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -77,6 +79,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(builder =>
+{
+	builder.AllowAnyOrigin();
+	builder.AllowAnyHeader();
+	builder.AllowAnyMethod();
+	builder.AllowCredentials(); // куки
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
