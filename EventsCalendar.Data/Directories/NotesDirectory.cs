@@ -20,7 +20,7 @@ public class NotesDirectory : IDirectory<Note>
 		}
 	}
 
-	public void Add(Note entity)
+	public Note Add(Note entity)
 	{
 		using (DataContext context = new DataContext())
 		{
@@ -31,15 +31,19 @@ public class NotesDirectory : IDirectory<Note>
 
 			context.Notes.Add(entity);
 			context.SaveChanges();
+
+			return entity;
 		}
 	}
 
-	public void Edit(Note entity)
+	public Note Edit(Note entity)
 	{
 		using (DataContext contex = new DataContext())
 		{
 			contex.Notes.Update(entity);
 			contex.SaveChanges();
+
+			return entity;
 		}
 	}
 

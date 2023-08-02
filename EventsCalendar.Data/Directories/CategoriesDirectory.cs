@@ -20,7 +20,7 @@ public class CategoriesDirectory : IDirectory<Category>
 		}
 	}
 
-	public void Add(Category entity)
+	public Category Add(Category entity)
 	{
 		using (DataContext context = new DataContext())
 		{
@@ -31,15 +31,19 @@ public class CategoriesDirectory : IDirectory<Category>
 
 			context.Categories.Add(entity);
 			context.SaveChanges();
+
+			return entity;
 		}
 	}
 
-	public void Edit(Category entity)
+	public Category Edit(Category entity)
 	{
 		using (DataContext contex = new DataContext())
 		{
 			contex.Categories.Update(entity);
 			contex.SaveChanges();
+
+			return entity;
 		}
 	}
 
