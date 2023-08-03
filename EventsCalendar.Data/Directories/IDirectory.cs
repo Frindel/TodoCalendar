@@ -8,9 +8,9 @@ public interface IDirectory<T> where T: BaseEntity
 
 	public T Get(Func<T, bool> condition);
 
-	public T Add(T entity);
+	public void Add(T entity);
 
-	public T Edit(T entity);
+	public void Edit(T entity);
 
 	public void Remove(T entity);
 }

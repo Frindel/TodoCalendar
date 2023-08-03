@@ -4,6 +4,7 @@ using EventsCalendar.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EventsCalendar.Mappers;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidateIssuerSigningKey = true, // валидация ключа безопасности
 		};
 	});
+
+// добавление маппера
+builder.Services.AddAutoMapper(typeof(CategoriesMappingProfile));
 
 // настройка swagger
 builder.Services.AddSwaggerGen(option =>
@@ -85,7 +89,6 @@ app.UseCors(builder =>
 	builder.AllowAnyOrigin();
 	builder.AllowAnyHeader();
 	builder.AllowAnyMethod();
-	builder.AllowCredentials(); // куки
 });
 
 app.UseAuthentication();

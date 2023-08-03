@@ -1,4 +1,5 @@
 ﻿using EventsCalendar.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsCalendar.Data.Directories;
 
@@ -20,7 +21,7 @@ public class CategoriesDirectory : IDirectory<Category>
 		}
 	}
 
-	public Category Add(Category entity)
+	public void Add(Category entity)
 	{
 		using (DataContext context = new DataContext())
 		{
@@ -31,19 +32,15 @@ public class CategoriesDirectory : IDirectory<Category>
 
 			context.Categories.Add(entity);
 			context.SaveChanges();
-
-			return entity;
 		}
 	}
 
-	public Category Edit(Category entity)
+	public void Edit(Category entity)
 	{
 		using (DataContext contex = new DataContext())
 		{
 			contex.Categories.Update(entity);
 			contex.SaveChanges();
-
-			return entity;
 		}
 	}
 

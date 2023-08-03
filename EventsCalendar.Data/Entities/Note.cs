@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsCalendar.Data.Entities;
@@ -18,5 +19,6 @@ public class Note : BaseEntity
 
 	public DateOnly Date { get; set; }
 
+	[JsonIgnore]
 	public List<Category>? Categories { get; set; }
 }
