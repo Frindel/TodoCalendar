@@ -1,4 +1,5 @@
 ﻿using EventsCalendar.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsCalendar.Data.Directories;
 
@@ -8,7 +9,8 @@ public class NotesDirectory : IDirectory<Note>
 	{
 		using (DataContext context = new DataContext())
 		{
-			return (condition == null) ? context.Notes.ToList() : context.Notes.Where(condition).ToList();
+			var request = context.Notes.Include(n => n.Categories);
+			return (condition == null) ? request.ToList() : request.Where(condition).ToList();
 		}
 	}
 
@@ -16,7 +18,7 @@ public class NotesDirectory : IDirectory<Note>
 	{
 		using (DataContext context = new DataContext())
 		{
-			return context.Notes.Where(condition).FirstOrDefault();
+			return context.Notes.Include(n => n.Categories).Where(condition).FirstOrDefault();
 		}
 	}
 
@@ -36,10 +38,41 @@ public class NotesDirectory : IDirectory<Note>
 
 	public void Edit(Note entity)
 	{
-		using (DataContext contex = new DataContext())
+		using (DataContext context = new DataContext())
 		{
-			contex.Notes.Update(entity);
-			contex.SaveChanges();
+			var currentNote = context.Notes.Include(n => n.Categories)
+				.Where(n => n.UserId == entity.UserId && n.Id == entity.Id)
+				.First();
+
+			var existingCategories = currentNote.Categories;
+			var newCategories = entity.Categories.ToList();
+			
+			if (entity.Categories.Count == 0)
+				currentNote.Categories.Clear();
+
+			for (int index = 0; index<existingCategories.Count; index++)
+			{
+				bool exist = false;
+
+				foreach (var addedCategory in newCategories)
+					if (addedCategory.Id == existingCategories[index].Id)
+					{
+						newCategories.Remove(addedCategory);
+						exist = true;
+						break;
+					}
+
+				if (!exist)
+				{
+					existingCategories.Remove(existingCategories[index]);
+					index--;
+				}
+			}
+
+			foreach (var addedCategory in newCategories)
+				currentNote.Categories.Add(context.Categories.Find(addedCategory.Id, addedCategory.UserId));
+			
+			context.SaveChanges();
 		}
 	}
 

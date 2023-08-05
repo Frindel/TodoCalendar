@@ -10,7 +10,7 @@ public class DataContext : DbContext
 	public DbSet<Category> Categories { get; set; } = null!;
 	public DbSet<Note> Notes { get; set; } = null!;
 
-	public DataContext(bool cleanDb = false)
+	public DataContext(bool cleanDb = false) :base()
 	{
 		if (cleanDb)
 			Database.EnsureDeleted();
@@ -25,9 +25,16 @@ public class DataContext : DbContext
 		builder.AddJsonFile("appsettings.json");
 		var config = builder.Build();
 
-		// получение строки подключения
+		// получение ст роки подключения
 		string connectionString = config.GetConnectionString("DefaultConnection");
 
 		optBuilder.UseSqlite(connectionString);
+	}
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Note>()
+			.HasMany(n=>n.Categories)
+			.WithMany()
+			.UsingEntity(j => j.ToTable("NotesCategories"));
 	}
 }

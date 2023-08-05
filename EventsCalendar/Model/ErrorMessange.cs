@@ -10,7 +10,7 @@ public class ErrorMessage
 	static ErrorMessage()
 	{
 		FatalError = new ErrorMessage("fatal error");
-		FatalError = new ErrorMessage("No valid");
+		NoValid = new ErrorMessage("No valid");
 	}
 
 	[JsonPropertyName("ErrorMessage")] 
