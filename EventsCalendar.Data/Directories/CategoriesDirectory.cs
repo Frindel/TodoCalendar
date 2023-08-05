@@ -26,7 +26,7 @@ public class CategoriesDirectory : IDirectory<Category>
 		using (DataContext context = new DataContext())
 		{
 			int? id = context.Categories.Where(c => c.UserId == entity.UserId)
-				.OrderBy(c => c.Id).Select(c => c.Id).Take(1).FirstOrDefault();
+				.OrderByDescending(c => c.Id).Select(c => c.Id).Take(1).FirstOrDefault();
 
 			entity.Id = (id ?? 0) + 1;
 
